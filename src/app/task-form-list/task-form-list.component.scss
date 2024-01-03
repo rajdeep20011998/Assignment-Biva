@@ -1,0 +1,59 @@
+/* Apply a modern, clean styling to the task list table */
+div {
+  margin: 20px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+// th, td {
+//   border: 1px solid #ddd;
+//   padding: 12px;
+//   text-align: left;
+// }
+
+th {
+  background-color: #f4f4f4;
+}
+
+td {
+  font-size: 16px;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.edit-icon {
+  // padding-left: 1em;
+  cursor: pointer;
+}
+
+/* Responsive styling for small screens */
+@media (max-width: 600px) {
+  th, td {
+    font-size: 14px;
+  }
+
+  button {
+    font-size: 14px;
+  }
+}

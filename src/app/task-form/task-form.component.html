@@ -1,0 +1,51 @@
+<div class="form-area">
+  <h1 class="text-center"> Form</h1>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Task Name</label>
+      <input
+        type="text"
+        placeholder="Task Name"
+        class="form-control"
+        name="fullName"
+        formControlName="name"
+        [ngClass]="{ 'is-invalid': name.touched && name.invalid }"
+      />
+      <div class="alert-message" *ngIf="name.touched && name.invalid">
+        <div *ngIf="name.errors?.required">The Task Name is required.</div>
+        <div *ngIf="name.errors?.minlength">The Task Name must be at least 5 letters long.</div>
+      </div>
+    </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea
+          cols="30"
+          rows="10"
+          placeholder="Description"
+          class="form-control"
+          name="description"
+          formControlName="description"
+          [ngClass]="{ 'is-invalid': Description.touched && Description.invalid }"
+        ></textarea>
+        <div class="alert-message" *ngIf="Description.touched && Description.invalid">
+          <div *ngIf="Description.errors?.required">Description is required.</div>
+        </div>
+      </div>
+
+    <div class="form-group">
+      <label>Due Date</label>
+      <input
+        type="date"
+        class="form-control"
+        name="dueDate"
+        formControlName="dueDate"
+        [ngClass]="{ 'is-invalid': dueDate.touched && dueDate.invalid }"
+      />
+      <div class="alert-message" *ngIf="dueDate.touched && dueDate.invalid">
+        <div *ngIf="dueDate.errors?.required">Due Date is required.</div>
+      </div>
+    </div>
+    <button type="submit" class="btn-submit" [disabled]="form.invalid">Submit</button>
+  </form>
+</div>

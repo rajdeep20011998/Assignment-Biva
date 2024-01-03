@@ -25,14 +25,18 @@ export class TaskService {
     this.tasks.push(task);
     this.updateLocalStorage();
   }
-
-  editTask(updatedTask: Task): void {
+editTask(updatedTask: Task | null): void {
+  if (updatedTask !== null) {
     const index = this.tasks.findIndex((task) => task.id === updatedTask.id);
     if (index !== -1) {
       this.tasks[index] = { ...updatedTask };
       this.updateLocalStorage();
     }
   }
+}
+
+
+
 
   deleteTask(id: number): void {
     this.tasks = this.tasks.filter((task) => task.id !== id);
@@ -49,7 +53,7 @@ export class TaskService {
         new Date(task.dueDate) >= currentDate && new Date(task.dueDate) <= sevenDaysLater
     );
   }
-  
+
   private updateLocalStorage(): void {
     localStorage.setItem('tasks', JSON.stringify(this.tasks));
   }

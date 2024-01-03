@@ -9,8 +9,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./task-form-list.component.scss']
 })
 export class TaskFormListComponent implements OnInit {
-  tasks: Task[] = [];
-  editForm: FormGroup;
+  public tasks: Task[] = [];
+  public editForm: FormGroup;
+  public selectedTask: Task | null = null;
 
   constructor(private taskService: TaskService, private fb: FormBuilder) {
     this.editForm = this.fb.group({
@@ -29,7 +30,16 @@ export class TaskFormListComponent implements OnInit {
   }
 
   editTask(task: Task): void {
-    this.editForm.patchValue(task);
+    this.selectedTask = { ...task };
+    this.editForm.patchValue(this.selectedTask);
+  }
+
+  areTasksEqual(task1: Task, task2: Task): boolean {
+    return (
+      task1.name === task2.name &&
+      task1.description === task2.description &&
+      new Date(task1.dueDate).getTime() === new Date(task2.dueDate).getTime()
+    );
   }
 
   cancelEdit(): void {
@@ -37,14 +47,21 @@ export class TaskFormListComponent implements OnInit {
   }
 
   saveEditedTask(): void {
-    const editedTask: Task = this.editForm.value;
-    this.taskService.editTask(editedTask);
-    this.loadTasks(); // Reload tasks after editing
-    this.editForm.reset();
+    if (this.selectedTask !== null) {
+      const editedTaskValues = this.editForm.value;
+      this.selectedTask = { ...this.selectedTask, ...editedTaskValues };
+      this.taskService.editTask(this.selectedTask);
+      this.loadTasks(); 
+      this.editForm.reset();
+      this.selectedTask = null;
+    } else {
+      this.editForm.reset();
+      this.selectedTask = null;
+    }
   }
 
   deleteTask(id: number): void {
     this.taskService.deleteTask(id);
-    this.loadTasks(); // Reload tasks after deletion
+    this.loadTasks(); 
   }
 }

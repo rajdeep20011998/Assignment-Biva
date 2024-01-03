@@ -10,6 +10,8 @@ import { TaskFormListComponent } from './task-form-list/task-form-list.component
 import { ChartComponent } from './chart/chart.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     NgApexchartsModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
 
   exports: [RouterModule],

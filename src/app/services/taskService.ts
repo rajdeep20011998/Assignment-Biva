@@ -1,31 +1,61 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { Task } from '../model/task.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskService {
-  private tasks: Task[] = [];
-  
+  tasks: Task[] = [];
 
-  getTasks(): Observable<Task[]> {
-    return of(this.tasks);
+  constructor() {
+    this.loadTasksFromLocalStorage();
+  }
+
+  loadTasksFromLocalStorage(): void {
+    const storedTasks = localStorage.getItem('tasks');
+    this.tasks = storedTasks ? JSON.parse(storedTasks) : [];
+  }
+
+  getTasks(): Task[] {
+    return [...this.tasks];
   }
 
   addTask(task: Task): void {
+    task.id = this.generateUniqueId();task.id = this.generateUniqueId();
     this.tasks.push(task);
-    console.log(this.tasks)
+    this.updateLocalStorage();
   }
 
-  editTask(task: Task): void {
-    const index = this.tasks.findIndex((t) => t.id === task.id);
+  editTask(updatedTask: Task): void {
+    const index = this.tasks.findIndex((task) => task.id === updatedTask.id);
     if (index !== -1) {
-      this.tasks[index] = task;
+      this.tasks[index] = { ...updatedTask };
+      this.updateLocalStorage();
     }
   }
 
   deleteTask(id: number): void {
     this.tasks = this.tasks.filter((task) => task.id !== id);
+    this.updateLocalStorage();
+  }
+
+  getTasksDueInNext7Days(): Task[] {
+    const currentDate = new Date();
+    const sevenDaysLater = new Date();
+    sevenDaysLater.setDate(currentDate.getDate() + 7);
+
+    return this.tasks.filter(
+      (task) =>
+        new Date(task.dueDate) >= currentDate && new Date(task.dueDate) <= sevenDaysLater
+    );
+  }
+  
+  private updateLocalStorage(): void {
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+  }
+
+  private generateUniqueId(): number {
+    // Use a simple incrementing counter for unique IDs
+    return this.tasks.length > 0 ? Math.max(...this.tasks.map(task => task.id)) + 1 : 1;
   }
 }

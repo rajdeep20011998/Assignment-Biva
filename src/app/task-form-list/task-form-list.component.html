@@ -11,21 +11,30 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let task of tasks">
-        <td>{{task.id}}</td>
-        <td>{{ task.name }}</td>
-        <td>{{ task.description }}</td>
-        <td>{{ task.dueDate | date: 'dd/MM/yyyy' }}</td>
-        <td>
-          <button (click)="editTask()">Edit</button>
-          <button (click)="deleteTask(task.id)">Delete</button>
-        </td>
-      </tr>
+      <ng-container *ngFor="let task of tasks; let i = index">
+        <tr *ngIf="editForm.getRawValue() !== task; else editRow">
+          <td>{{ i + 1 }}</td>
+          <td>{{ task.name }}</td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.dueDate | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <button (click)="editTask(task)">Edit</button>
+            <button (click)="deleteTask(task.id)">Delete</button>
+          </td>
+        </tr>
+        <ng-template #editRow>
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td><input formControlName="name" /></td>
+            <td><textarea formControlName="description"></textarea></td>
+            <td><input type="date" formControlName="dueDate" /></td>
+            <td>
+              <button (click)="saveEditedTask()">Save</button>
+              <button (click)="cancelEdit()">Cancel</button>
+            </td>
+          </tr>
+        </ng-template>
+      </ng-container>
     </tbody>
   </table>
-  <span
-    class="edit-icon"
-    (click)="editTask()">
-    <i class="fal fa-pencil"></i>
-           </span>
 </div>
